@@ -1,11 +1,11 @@
-package com.hjj.messageserver.tutorial1;
+package com.hjj.messageserver.homework1;
 
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 
-public class Tut1Sender {
+public class Homework1Sender {
 	
     @Autowired
     private RabbitTemplate template;

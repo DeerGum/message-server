@@ -4,9 +4,9 @@ spring:
   rabbitmq:
     host: 127.0.0.1
     port: 5672
-    username: hjj
+    username: user
     password: Asdf1234$
 
 logging:
   level:
-    org: ERROR
+    org: WARN

@@ -5,11 +5,13 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
+@EnableScheduling
 public class MessageServerApplication {
 
-    @Profile("tutorial")
+    @Profile("cli")
     @Bean
     public CommandLineRunner tutorial() {
         return new RabbitAmqpTutorialsRunner();

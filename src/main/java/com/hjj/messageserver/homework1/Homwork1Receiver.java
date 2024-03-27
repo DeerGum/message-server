@@ -1,10 +1,10 @@
-package com.hjj.messageserver.tutorial1;
+package com.hjj.messageserver.homework1;
 
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 
 @RabbitListener(queues = "hello")
-public class Tut1Receiver {
+public class Homwork1Receiver {
 	
     @RabbitHandler
     public void receive(String in) {
