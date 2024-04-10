@@ -1,4 +1,4 @@
-package com.hjj.messageserver.homework1;
+package com.hjj.messageserver.homework.config;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -7,7 +7,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 
-public class Homework1Sender {
+public class HomeworkSender {
 	
 	@Autowired
 	private RabbitTemplate template;

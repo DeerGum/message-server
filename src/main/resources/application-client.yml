@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: rabbitmq-chat-client
+  rabbitmq:
+    username: user1
+    password: pass
+    virtual-host: chat
+
+server:
+  port: 9090

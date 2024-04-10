@@ -1,9 +1,9 @@
-package com.hjj.messageserver.homework1;
+package com.hjj.messageserver.homework.config;
 
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.util.StopWatch;
 
-public class Homework1Receiver {
+public class HomeworkReceiver {
 	
 	@RabbitListener(queues = "#{commandQueue.name}")
 	public void receiveCommandQueue(String in) throws InterruptedException {

@@ -1,4 +1,4 @@
-package com.hjj.messageserver.homework1;
+package com.hjj.messageserver.homework.config;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
@@ -10,9 +10,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
-@Profile({"hw1"})
+@Profile({"hw"})
 @Configuration
-public class Homework1Config {
+public class HomeworkConfig {
 	
 	@Bean
 	public TopicExchange requestExchange() {
@@ -35,8 +35,8 @@ public class Homework1Config {
 	private static class ReceiverConfig {
 
 		@Bean
-		public Homework1Receiver receiver() {
-	 	 	return new Homework1Receiver();
+		public HomeworkReceiver receiver() {
+	 	 	return new HomeworkReceiver();
 		}
 
 	    @Bean
@@ -105,7 +105,7 @@ public class Homework1Config {
 	
 	@Profile("sender")
 	@Bean
-	public Homework1Sender sender() {
-		return new Homework1Sender();
+	public HomeworkSender sender() {
+		return new HomeworkSender();
 	}
 }

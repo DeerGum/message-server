@@ -4,8 +4,8 @@ spring:
   rabbitmq:
     host: 127.0.0.1
     port: 5672
-    username: user
-    password: Asdf1234$
+    username: admin
+    password: pass
 
 logging:
   level:
