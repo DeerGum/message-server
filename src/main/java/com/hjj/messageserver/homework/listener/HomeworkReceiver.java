@@ -1,4 +1,4 @@
-package com.hjj.messageserver.homework.config;
+package com.hjj.messageserver.homework.listener;
 
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.util.StopWatch;
