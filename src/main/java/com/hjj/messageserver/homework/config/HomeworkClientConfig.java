@@ -1,5 +1,6 @@
 package com.hjj.messageserver.homework.config;
 
+import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
@@ -9,6 +10,7 @@ import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.amqp.support.converter.SimpleMessageConverter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.amqp.RabbitProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -59,5 +61,21 @@ public class HomeworkClientConfig {
 		RabbitTemplate template = new RabbitTemplate(connectionFactory);
 		template.setMessageConverter(messageConverter);
 		return template;
+	}
+
+	@Bean
+	public Queue userQueue() {
+		return QueueBuilder.durable("user." + rabbitProperties.getUsername())
+				.deadLetterExchange("")
+				.deadLetterRoutingKey("dead-letter")
+				.build();
+	}
+
+	@Bean
+	public Binding bindingUserExchangeToUserQueue(@Qualifier("userExchange") TopicExchange userExchange,
+												  @Qualifier("userQueue") Queue userQueue) {
+		return BindingBuilder.bind(userQueue)
+				.to(userExchange)
+				.with("*.user." + rabbitProperties.getUsername());
 	}
 }

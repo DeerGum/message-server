@@ -11,7 +11,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 public class MessageServerApplication {
 
-    @Profile("cli")
+    @Profile("schedule")
     @Bean
     public CommandLineRunner tutorial() {
         return new RabbitAmqpTutorialsRunner();

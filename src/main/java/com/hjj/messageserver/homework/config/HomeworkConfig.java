@@ -1,10 +1,6 @@
 package com.hjj.messageserver.homework.config;
 
-import org.springframework.amqp.core.Binding;
-import org.springframework.amqp.core.BindingBuilder;
-import org.springframework.amqp.core.DirectExchange;
-import org.springframework.amqp.core.Queue;
-import org.springframework.amqp.core.TopicExchange;
+import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
@@ -29,12 +25,12 @@ public class HomeworkConfig {
 		return new TopicExchange("chat");
 	}
 	@Bean
-	public DirectExchange userExchange() {
-		return new DirectExchange("user");
+	public TopicExchange userExchange() {
+		return new TopicExchange("user");
 	}
 	@Bean
-	public DirectExchange roomExchange() {
-		return new DirectExchange("room");
+	public FanoutExchange roomExchange() {
+		return new FanoutExchange("room");
 	}
 	
 	@Profile({"receiver", "server"})
@@ -72,14 +68,14 @@ public class HomeworkConfig {
 	    }
 
 	    @Bean
-	    public Queue userQueue() {
-	        return new Queue("user");
-	    }
-
-	    @Bean
 	    public Queue roomQueue() {
 	        return new Queue("room");
 	    }
+
+		@Bean
+		public Queue userQueue() {
+			return new Queue("user");
+		}
 		
 		@Bean
 		public Binding bindingRequestExchangeToCommandQueue(@Qualifier("requestExchange") TopicExchange requestExchange,
@@ -99,7 +95,7 @@ public class HomeworkConfig {
 
 		@Bean
 		public Binding bindingChatExchangeToUserExchange(@Qualifier("chatExchange") TopicExchange chatExchange,
-				@Qualifier("userExchange") DirectExchange userExchange) {
+				@Qualifier("userExchange") TopicExchange userExchange) {
 			return BindingBuilder.bind(userExchange)
 			    .to(chatExchange)
 			    .with("*.user.#");
@@ -107,26 +103,25 @@ public class HomeworkConfig {
 
 		@Bean
 		public Binding bindingChatExchangeToRoomExchange(@Qualifier("chatExchange") TopicExchange chatExchange,
-				@Qualifier("roomExchange") DirectExchange roomExchange) {
+				@Qualifier("roomExchange") FanoutExchange roomExchange) {
 			return BindingBuilder.bind(roomExchange)
 					.to(chatExchange)
 					.with("*.room.#");
 		}
 
 		@Bean
-		public Binding bindingUserExchangeToUserQueue(@Qualifier("userExchange") DirectExchange userExchange,
-				@Qualifier("userQueue")	Queue userQueue) {
+		public Binding bindingUserExchangeToUserQueue(@Qualifier("userExchange") TopicExchange userExchange,
+													  @Qualifier("userQueue") Queue userQueue) {
 			return BindingBuilder.bind(userQueue)
 					.to(userExchange)
 					.with("#");
 		}
 
 		@Bean
-		public Binding bindingRoomTopicToRoomQueue(@Qualifier("roomExchange") DirectExchange roomExchange,
+		public Binding bindingRoomTopicToRoomQueue(@Qualifier("roomExchange") FanoutExchange roomExchange,
 				@Qualifier("roomQueue")	Queue roomQueue) {
 			return BindingBuilder.bind(roomQueue)
-					.to(roomExchange)
-					.with("#");
+					.to(roomExchange);
 		}
 	}
 	
