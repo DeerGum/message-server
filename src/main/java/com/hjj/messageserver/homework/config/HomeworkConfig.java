@@ -15,11 +15,7 @@ import com.hjj.messageserver.homework.listener.HomeworkSender;
 @Profile({"hw"})
 @Configuration
 public class HomeworkConfig {
-	
-	@Bean
-	public TopicExchange requestExchange() {
-		return new TopicExchange("request");
-	}
+
 	@Bean
 	public TopicExchange chatExchange() {
 		return new TopicExchange("chat");
@@ -31,6 +27,22 @@ public class HomeworkConfig {
 	@Bean
 	public FanoutExchange roomExchange() {
 		return new FanoutExchange("room");
+	}
+	
+	@Bean
+	public Binding bindingChatExchangeToUserExchange(@Qualifier("chatExchange") TopicExchange chatExchange,
+			@Qualifier("userExchange") TopicExchange userExchange) {
+		return BindingBuilder.bind(userExchange)
+		    .to(chatExchange)
+		    .with("*.user.#");
+	}
+
+	@Bean
+	public Binding bindingChatExchangeToRoomExchange(@Qualifier("chatExchange") TopicExchange chatExchange,
+			@Qualifier("roomExchange") FanoutExchange roomExchange) {
+		return BindingBuilder.bind(roomExchange)
+				.to(chatExchange)
+				.with("*.room.#");
 	}
 	
 	@Profile({"receiver", "server"})
@@ -62,67 +74,6 @@ public class HomeworkConfig {
 	 	 	return new HomeworkReceiver();
 		}
 
-	    @Bean
-	    public Queue commandQueue() {
-	        return new Queue("command");
-	    }
-
-	    @Bean
-	    public Queue roomQueue() {
-	        return new Queue("room");
-	    }
-
-		@Bean
-		public Queue userQueue() {
-			return new Queue("user");
-		}
-		
-		@Bean
-		public Binding bindingRequestExchangeToCommandQueue(@Qualifier("requestExchange") TopicExchange requestExchange,
-				@Qualifier("commandQueue") Queue commandQueue) {
-			return BindingBuilder.bind(commandQueue)
-			    .to(requestExchange)
-			    .with("command.#");
-		}
-
-		@Bean
-		public Binding bindingRequestExchangeToChatExchange(@Qualifier("requestExchange") TopicExchange requestExchange,
-				@Qualifier("chatExchange") TopicExchange chatExchange) {
-			return BindingBuilder.bind(chatExchange)
-			    .to(requestExchange)
-			    .with("chat.#");
-		}
-
-		@Bean
-		public Binding bindingChatExchangeToUserExchange(@Qualifier("chatExchange") TopicExchange chatExchange,
-				@Qualifier("userExchange") TopicExchange userExchange) {
-			return BindingBuilder.bind(userExchange)
-			    .to(chatExchange)
-			    .with("*.user.#");
-		}
-
-		@Bean
-		public Binding bindingChatExchangeToRoomExchange(@Qualifier("chatExchange") TopicExchange chatExchange,
-				@Qualifier("roomExchange") FanoutExchange roomExchange) {
-			return BindingBuilder.bind(roomExchange)
-					.to(chatExchange)
-					.with("*.room.#");
-		}
-
-		@Bean
-		public Binding bindingUserExchangeToUserQueue(@Qualifier("userExchange") TopicExchange userExchange,
-													  @Qualifier("userQueue") Queue userQueue) {
-			return BindingBuilder.bind(userQueue)
-					.to(userExchange)
-					.with("#");
-		}
-
-		@Bean
-		public Binding bindingRoomTopicToRoomQueue(@Qualifier("roomExchange") FanoutExchange roomExchange,
-				@Qualifier("roomQueue")	Queue roomQueue) {
-			return BindingBuilder.bind(roomQueue)
-					.to(roomExchange);
-		}
 	}
 	
 	@Profile("sender")
