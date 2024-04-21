@@ -78,7 +78,7 @@ public class HomeworkClientConfig {
 	
 	@Bean
 	public Binding bindingUserExchangeToUserIdExchange(@Qualifier("userExchange") TopicExchange userExchange,
-			@Qualifier("UserIdExchange") FanoutExchange userIdExchange) {
+			@Qualifier("userIdExchange") FanoutExchange userIdExchange) {
 		return BindingBuilder.bind(userIdExchange)
 		    .to(userExchange)
 		    .with("*.user." + rabbitProperties.getUsername());

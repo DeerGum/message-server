@@ -25,8 +25,8 @@ public class HomeworkConfig {
 		return new TopicExchange("user");
 	}
 	@Bean
-	public FanoutExchange roomExchange() {
-		return new FanoutExchange("room");
+	public TopicExchange roomExchange() {
+		return new TopicExchange("room");
 	}
 	
 	@Bean
@@ -39,7 +39,7 @@ public class HomeworkConfig {
 
 	@Bean
 	public Binding bindingChatExchangeToRoomExchange(@Qualifier("chatExchange") TopicExchange chatExchange,
-			@Qualifier("roomExchange") FanoutExchange roomExchange) {
+			@Qualifier("roomExchange") TopicExchange roomExchange) {
 		return BindingBuilder.bind(roomExchange)
 				.to(chatExchange)
 				.with("*.room.#");
