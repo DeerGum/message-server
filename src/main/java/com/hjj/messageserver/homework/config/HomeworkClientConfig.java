@@ -70,12 +70,24 @@ public class HomeworkClientConfig {
 				.deadLetterRoutingKey("dead-letter")
 				.build();
 	}
+	
+	@Bean
+	public FanoutExchange userIdExchange() {
+		return new FanoutExchange("user." + rabbitProperties.getUsername());
+	}
+	
+	@Bean
+	public Binding bindingUserExchangeToUserIdExchange(@Qualifier("userExchange") TopicExchange userExchange,
+			@Qualifier("userIdExchange") FanoutExchange userIdExchange) {
+		return BindingBuilder.bind(userIdExchange)
+		    .to(userExchange)
+		    .with("*.user." + rabbitProperties.getUsername());
+	}
 
 	@Bean
-	public Binding bindingUserExchangeToUserQueue(@Qualifier("userExchange") TopicExchange userExchange,
+	public Binding bindingUserIdExchangeToUserQueue(@Qualifier("userIdExchange") FanoutExchange userIdExchange,
 												  @Qualifier("userQueue") Queue userQueue) {
 		return BindingBuilder.bind(userQueue)
-				.to(userExchange)
-				.with("*.user." + rabbitProperties.getUsername());
+				.to(userIdExchange);
 	}
 }
